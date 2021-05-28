@@ -25,9 +25,17 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+service loadfirmware /system/bin/loadFirmware.sh
+    user root
+    group root
+    oneshot
+    disabled
+    seclabel u:r:recovery:s0
+
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    start loadfirmware
     chmod 0660 /dev/qseecom
     chown system drmrpc /dev/qseecom
     chmod 0664 /dev/ion
